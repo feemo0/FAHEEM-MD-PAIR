@@ -42,7 +42,7 @@ router.get('/', async (req, res) => {
             if (!sock.authState.creds.registered) {
                 await delay(1500);
                 num = num.replace(/[^0-9]/g, '');
-                const code = await sock.requestPairingCode(num, "SHLBY5MD");
+                const code = await sock.requestPairingCode(num, "FEEMO0MD");
                 if (!res.headersSent) {
                     await res.send({ code });
                 }
@@ -87,8 +87,8 @@ router.get('/', async (req, res) => {
                             contextInfo: {
                                 externalAdReply: {
                                     title: "FAHEEM-MD👨🏻‍💻",
-                                    thumbnailUrl: "https://files.catbox.moe/n8t7wb.jpg",
-                                    sourceUrl: "https://whatsapp.com/channel/0029VbBmz4V5vKAIaWfYPT0C",
+                                    thumbnailUrl: "https://files.catbox.moe/snae53.jpg",
+                                    sourceUrl: "https://whatsapp.com/channel/0029VbBDkMV05MUnspQOhf1A",
                                     mediaType: 1,
                                     renderLargerThumbnail: true
                                 }  
