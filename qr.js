@@ -70,14 +70,14 @@ router.get('/', async (req, res) => {
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 *❹ || Repo =* https://github.com/feemo0/FAHEEM-MD
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-*💙ᴄʀᴇᴀᴛᴇᴅ ʙʏ ᴀᴅᴇᴇʟ-ᴍᴅ💛*`;
+*💙ᴄʀᴇᴀᴛᴇᴅ ʙʏ ғᴀʜᴇᴇᴍ-ᴍᴅ💛*`;
                         
                         await sock.sendMessage(sock.user.id, {
                             text: desc,
                             contextInfo: {
                                 externalAdReply: {
                                     title: "FAHEEM-MD👨🏻‍💻",
-                                    thumbnailUrl: "https://files.catbox.moe/hg5hj6.jpg",
+                                    thumbnailUrl: "https://files.catbox.moe/snae53.jpg",
                                     sourceUrl: "https://whatsapp.com/channel/0029VbBDkMV05MUnspQOhf1A",
                                     mediaType: 1,
                                     renderLargerThumbnail: true
