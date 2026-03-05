@@ -1,148 +1,833 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
 <head>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1737874207490861"
-            crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAHEEM-MD QR SCANNER</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&amp;display=swap" rel="stylesheet">
-    <title>QR</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Space+Mono&display=swap"
+        rel="stylesheet">
+
     <style>
-        .bg {
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-size: 400% 400%;
-            animation: AnimateBG 25s ease infinite;
+        :root {
+            --bg: #03060f;
+            --navbar-bg: rgba(3, 6, 15, 0.72);
+            --glass: rgba(0, 255, 140, 0.04);
+            --glass-border: rgba(0, 255, 140, 0.18);
+            --text: #dfffec;
+            --text-muted: rgba(120, 255, 180, 0.55);
+            --accent: #00ff8c;
+            --accent2: #00d4ff;
+            --accent3: #ff2d55;
+            --accent-glow: rgba(0, 255, 140, 0.28);
+            --card: rgba(228, 235, 231, 0.035);
+            --footer-bg: rgba(3, 6, 15, 0.92);
+            --wave-a: rgba(0, 255, 140, 0.07);
+            --wave-b: rgba(0, 180, 255, 0.05);
         }
 
-        @keyframes AnimateBG {
-            0% {
-                background-position: 0% 50%
-            }
+        [data-theme="light"] {
+            --bg: #d4d6d5;
+            --navbar-bg: rgba(237, 255, 245, 0.78);
+            --glass: rgba(0, 170, 90, 0.07);
+            --glass-border: rgba(0, 170, 90, 0.22);
+            --text: #012b15;
+            --text-muted: rgba(0, 120, 60, 0.6);
+            --accent: #008f52;
+            --accent2: #0070b8;
+            --accent3: #cc1133;
+            --accent-glow: rgba(0, 145, 82, 0.22);
+            --card: rgba(255, 255, 255, 0.055);
+            --footer-bg: rgba(220, 255, 238, 0.95);
+            --wave-a: rgba(0, 170, 90, 0.08);
+            --wave-b: rgba(0, 160, 220, 0.06);
+            --text: white;
+        }
 
-            50% {
-                background-position: 100% 50%
-            }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-            100% {
-                background-position: 0% 50%
-            }
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            font-family: "Outfit";
-            background: linear-gradient(-45deg, #4a90e2, #3ac569, #9b59b6, #e74c3c);
-            background-size: 400% 400%;
-            animation: gradient 10s ease infinite;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background .45s, color .45s;
         }
 
-        @keyframes gradient {
+        /* BG Canvas */
+        #bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Grid */
+        .grid-veil {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(0, 255, 140, .025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 140, .025) 1px, transparent 1px);
+            background-size: 55px 55px;
+        }
+
+        /* Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(90px);
+        }
+
+        .o1 {
+            width: 520px;
+            height: 520px;
+            top: -160px;
+            left: -160px;
+            background: radial-gradient(circle, rgba(0, 255, 140, .09), transparent 70%);
+            animation: orbf 18s ease-in-out infinite;
+        }
+
+        .o2 {
+            width: 380px;
+            height: 380px;
+            bottom: -80px;
+            right: -80px;
+            background: radial-gradient(circle, rgba(0, 212, 255, .07), transparent 70%);
+            animation: orbf 22s ease-in-out infinite reverse 3s;
+        }
+
+        .o3 {
+            width: 260px;
+            height: 260px;
+            top: 45%;
+            left: 35%;
+            background: radial-gradient(circle, rgba(255, 45, 85, .05), transparent 70%);
+            animation: orbf 28s ease-in-out infinite 8s;
+        }
+
+        @keyframes orbf {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1)
+            }
+
+            33% {
+                transform: translate(40px, -55px) scale(1.05)
+            }
+
+            66% {
+                transform: translate(-30px, 30px) scale(.96)
+            }
+        }
+
+        /* Waves */
+        .waves {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .waves svg {
+            display: block;
+            width: 200%;
+        }
+
+        .w1 {
+            position: absolute;
+            bottom: 0;
+            animation: wm1 13s ease-in-out infinite;
+            fill: var(--wave-a);
+        }
+
+        .w2 {
+            position: absolute;
+            bottom: 0;
+            animation: wm2 17s ease-in-out infinite reverse;
+            fill: var(--wave-b);
+        }
+
+        .w3 {
+            position: absolute;
+            bottom: 0;
+            animation: wm1 21s ease-in-out infinite 4s;
+            fill: rgba(255, 45, 85, .03);
+        }
+
+        @keyframes wm1 {
+
+            0%,
+            100% {
+                transform: translateX(0) scaleY(1)
+            }
+
+            50% {
+                transform: translateX(-8%) scaleY(1.12)
+            }
+        }
+
+        @keyframes wm2 {
+
+            0%,
+            100% {
+                transform: translateX(-4%) scaleY(1)
+            }
+
+            50% {
+                transform: translateX(6%) scaleY(.92)
+            }
+        }
+
+        /* ══ NAVBAR ══ */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 200;
+            backdrop-filter: blur(24px) saturate(200%);
+            -webkit-backdrop-filter: blur(24px) saturate(200%);
+            background: var(--navbar-bg);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 2px 32px var(--accent-glow);
+            transition: background .45s;
+        }
+
+        .nav-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 13px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .logo-hex {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: 13px;
+            color: #000;
+            box-shadow: 0 0 22px var(--accent), 0 0 50px rgba(0, 255, 140, .2);
+            animation: hexPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes hexPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 22px var(--accent), 0 0 50px rgba(0, 255, 140, .2)
+            }
+
+            50% {
+                box-shadow: 0 0 35px var(--accent), 0 0 80px rgba(0, 255, 140, .35)
+            }
+        }
+
+        .logo-txt {
+            line-height: 1;
+        }
+
+        .logo-name {
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: 19px;
+            letter-spacing: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-tag {
+            display: block;
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 2.5px;
+            color: var(--text-muted);
+            -webkit-text-fill-color: var(--text-muted);
+            margin-top: 1px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 2px;
+            padding: 6px 13px;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            text-transform: uppercase;
+            transition: all .25s;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            color: var(--accent);
+            border-color: var(--glass-border);
+            background: var(--glass);
+            text-shadow: 0 0 10px var(--accent);
+        }
+
+        /* Theme pill */
+        .theme-pill {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            cursor: pointer;
+            padding: 7px 14px;
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            transition: all .3s;
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        .theme-pill:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 18px var(--accent-glow);
+        }
+
+        .pill-track {
+            width: 34px;
+            height: 18px;
+            background: var(--glass-border);
+            border-radius: 18px;
+            position: relative;
+            transition: background .3s;
+        }
+
+        [data-theme="light"] .pill-track {
+            background: var(--accent);
+        }
+
+        .pill-thumb {
+            width: 12px;
+            height: 12px;
+            background: var(--text);
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            transition: transform .3s;
+        }
+
+        [data-theme="light"] .pill-thumb {
+            transform: translateX(16px);
+            background: #fff;
+        }
+
+        .pill-icon {
+            font-size: 14px;
+        }
+
+        .pill-lbl {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        /* ══ HERO ══ */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 110px 20px 80px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 7px 20px;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2.5px;
+            color: var(--accent);
+            margin-bottom: 28px;
+            animation: badgePop .8s cubic-bezier(.34, 1.56, .64, 1) both .1s;
+        }
+
+        @keyframes badgePop {
+            from {
+                opacity: 0;
+                transform: scale(.8) translateY(10px)
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0)
+            }
+        }
+
+        .bdot {
+            width: 7px;
+            height: 7px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent);
+            animation: blink 1.6s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .2
+            }
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: clamp(28px, 7vw, 62px);
+            letter-spacing: 5px;
+            line-height: 1;
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 45%, #fff 55%, var(--accent) 100%);
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleFlow 5s linear infinite, titleIn .9s cubic-bezier(.34, 1.56, .64, 1) both .25s;
+            filter: drop-shadow(0 0 30px rgba(0, 255, 140, .25));
+        }
+
+        @keyframes titleFlow {
+            0% {
+                background-position: 0% center
+            }
+
+            100% {
+                background-position: 300% center
+            }
+        }
+
+        @keyframes titleIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(.95)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1)
+            }
+        }
+
+        .hero-sub {
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(9px, 1.8vw, 13px);
+            letter-spacing: 4px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 44px;
+            animation: fadeSlide .8s ease both .45s;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(16px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .electric-card {
+            position: relative;
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            background: #111;
+            color: white;
+            border-radius: 12px;
+        }
+
+        .electric-card::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #00f7ff, #ff00ff, #00f7ff);
+            background-size: 300% 300%;
+            animation: electricMove 4s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes electricMove {
             0% {
                 background-position: 0% 50%;
             }
 
+            100% {
+                background-position: 300% 50%;
+            }
+        }
+
+        .corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: var(--accent);
+            border-style: solid;
+        }
+
+        .c-tl {
+            top: 12px;
+            left: 12px;
+            border-width: 2px 0 0 2px;
+        }
+
+        .c-tr {
+            top: 12px;
+            right: 12px;
+            border-width: 2px 2px 0 0;
+        }
+
+        .c-bl {
+            bottom: 12px;
+            left: 12px;
+            border-width: 0 0 2px 2px;
+        }
+
+        .c-br {
+            bottom: 12px;
+            right: 12px;
+            border-width: 0 2px 2px 0;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: var(--accent);
+            text-align: center;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        /* QR image wrapper */
+        .qr-wrap {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        #qr-image {
+            width: 100%;
+            max-width: 260px;
+            border-radius: 14px;
+            display: block;
+            border: 2px solid var(--glass-border);
+            box-shadow: 0 0 30px rgba(0, 255, 140, .15), 0 0 60px rgba(0, 212, 255, .08);
+            transition: box-shadow .3s;
+        }
+
+        #qr-image:hover {
+            box-shadow: 0 0 45px rgba(0, 255, 140, .3), 0 0 80px rgba(0, 212, 255, .15);
+        }
+
+        /* QR scan line effect */
+        .qr-scan {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 0px);
+            max-width: 260px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            box-shadow: 0 0 12px var(--accent);
+            animation: scanLine 2.5s ease-in-out infinite;
+            pointer-events: none;
+            border-radius: 2px;
+        }
+
+        @keyframes scanLine {
+            0% {
+                top: 0;
+                opacity: 1
+            }
+
+            45% {
+                top: 100%;
+                opacity: 1
+            }
+
             50% {
-                background-position: 100% 50%;
+                opacity: 0
+            }
+
+            51% {
+                top: 0;
+                opacity: 0
+            }
+
+            55% {
+                opacity: 1
             }
 
             100% {
-                background-position: 0% 50%;
+                top: 0;
+                opacity: 1
             }
         }
 
-        jsl.code {
-            overflow: hidden;
-            background: linear-gradient(-45deg, #f1c40f, #3498db, #2ecc71, #e74c3c);
-            background-size: 400% 400%;
-            animation: gradient 8s ease infinite;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            font-family: 'Montserrat', sans-serif;
-            height: 110vh;
-            margin: 0px;
-
-        }
-
-        p.legend {
-            color: #fff;
-            font-size: 1em;
-            font-weight: 400;
-            padding: 0em 1.1em;
-            margin-top: 0.1em;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            overflow: hidden;
-        }
-
-        :root {
-            --main-color: hsl(212, 45%, 89%);
-            --principalText-color: hsl(218, 44%, 22%);
-            --secondText-color: hsl(220, 15%, 55%);
-        }
-
-        #content {
-            display: flex;
-            flex-direction: column;
-            width: 22rem;
+        /* Status text */
+        .qr-status {
             text-align: center;
-            background-color: #000000;
-            padding: 1rem;
-            border-radius: 14px;
+            margin-bottom: 6px;
         }
 
-        #QR-content img {
-            border-radius: 10px;
-            width: 20rem;
-        }
-
-        #title-container {
-            padding: 1rem 1rem 0 1rem;
-            color: #fff;
+        #main {
+            font-family: 'Orbitron', monospace;
+            font-size: 13px;
             font-weight: 700;
-            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            color: var(--accent);
         }
 
-        #description-container {
-            padding: 0 2.5rem 0 2.5rem;
-            color: #fff;
-            margin-bottom: 2rem;
+        #legend {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-top: 4px;
         }
 
-        #p-legend {
-            font-size: 1em;
-            font-weight: 400;
-            padding: 0em 1.1em;
-            margin-top: 0.1em;
+        /* Progress bar */
+        .progress-wrap {
+            margin: 16px 0 0;
+            width: 100%;
         }
 
-        .reload-button {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #3498db; /* Blue color */
-            color: #fff; /* White text color */
+        #progressBar {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            border-radius: 6px;
+            overflow: hidden;
+            border: none;
+            background: var(--glass-border);
+        }
+
+        #progressBar::-webkit-progress-bar {
+            background: var(--glass-border);
+            border-radius: 6px;
+        }
+
+        #progressBar::-webkit-progress-value {
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            border-radius: 6px;
+            box-shadow: 0 0 8px var(--accent);
+            transition: width .5s;
+        }
+
+        #progressBar::-moz-progress-bar {
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            border-radius: 6px;
+        }
+
+        .timer-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 6px;
+        }
+
+        .timer-lbl {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+        }
+
+        #timerCount {
+            font-family: 'Orbitron', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 1px;
+        }
+
+        /* Reload button */
+        .reload-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+            width: 100%;
+            padding: 13px;
+            border-radius: 12px;
             text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--text);
+            background: var(--card);
+            border: 1px solid transparent;
+            text-transform: uppercase;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform .25s, color .25s;
         }
 
-        .reload-button:hover {
-            background-color: #2980b9; /* Darker blue color on hover */
+        .reload-btn::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 14px;
+            background: conic-gradient(from var(--angle), var(--accent), var(--accent2), transparent, transparent, var(--accent));
+            z-index: -1;
+            opacity: 1;
+            animation: spinBorder 3s linear infinite;
+        }
+
+        .reload-btn::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 14px;
+            background: inherit;
+            filter: blur(12px);
+            z-index: -2;
+            opacity: .25;
+        }
+
+        .reload-btn:hover {
+            transform: translateY(-3px);
+            color: var(--accent);
+        }
+
+        .reload-btn .sw {
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent, rgba(0, 255, 140, .07), transparent);
+            transition: top .5s;
+            pointer-events: none;
+        }
+
+        .reload-btn:hover .sw {
+            top: 100%;
+        }
+
+        /* ══ FOOTER ══ */
+        footer {
+            position: relative;
+            z-index: 1;
+            background: var(--footer-bg);
+            border-top: 1px solid var(--glass-border);
+            backdrop-filter: blur(24px);
+            padding: 16px 20px;
+            text-align: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+        }
+
+        footer b {
+            color: var(--accent);
+            font-weight: 400;
+        }
+
+        /* ══ RESPONSIVE ══ */
+        @media(max-width:500px) {
+            .nav-link {
+                display: none;
+            }
+
+            .hero {
+                padding: 100px 16px 60px;
+            }
+
+            .electric-card {
+                padding: 24px 16px 20px;
+                border-radius: 16px;
+            }
+
+            .pill-lbl {
+                display: none;
+            }
         }
     </style>
+
+    <!-- ORIGINAL TIMER SCRIPT — unchanged -->
     <script>
         var timeleft = 30;
         var downloadTimer = setInterval(function () {
@@ -150,29 +835,172 @@
                 clearInterval(downloadTimer);
                 document.getElementById("progressBar").remove();
                 document.getElementById("main").innerHTML = "QR Expired! Please reload";
-                document.getElementById("legend").innerHTML = ""
+                document.getElementById("legend").innerHTML = "";
+                if (document.getElementById("timerCount"))
+                    document.getElementById("timerCount").innerHTML = "00";
             }
             document.getElementById("progressBar").value = 30 - timeleft;
+            if (document.getElementById("timerCount"))
+                document.getElementById("timerCount").innerHTML =
+                    timeleft < 10 ? "0" + timeleft : timeleft;
             timeleft -= 1;
         }, 1000);
     </script>
 </head>
+
 <body>
-<div class="bg">
-    <div id="content">
-        <div id="QR-content">
-            <img id="qr-image" src="/server" alt="QR CODE">
-        </div>
-        <div id="title-container">
-            <h2 id="main">FAHEEM-MD QR SCANNING </h2>
-            <p class="legend" id="legend">Scan The QR Code</p>
-        </div>
-        <div id="description-container">
-            <p id="semi" class="legend"></p>
-            <progress value="0" max="30" id="progressBar"></progress>
-        </div>
-        <a href="javascript:history.go(0)" class="reload-button">Reload Page</a>
+
+    <canvas id="bg-canvas"></canvas>
+    <div class="grid-veil"></div>
+    <div class="orb o1"></div>
+    <div class="orb o2"></div>
+    <div class="orb o3"></div>
+
+    <div class="waves">
+        <svg class="w1" viewBox="0 0 1440 180" preserveAspectRatio="none" style="height:120px">
+            <path
+                d="M0,80L60,90C120,100,240,120,360,116C480,112,600,84,720,80C840,76,960,96,1080,100C1200,104,1320,88,1380,80L1440,72L1440,180L0,180Z" />
+        </svg>
+        <svg class="w2" viewBox="0 0 1440 180" preserveAspectRatio="none" style="height:100px">
+            <path
+                d="M0,120L80,108C160,96,320,72,480,70C640,68,800,88,960,94C1120,100,1280,88,1360,82L1440,76L1440,180L0,180Z" />
+        </svg>
+        <svg class="w3" viewBox="0 0 1440 180" preserveAspectRatio="none" style="height:80px">
+            <path d="M0,140L120,128C240,116,480,92,720,92C960,92,1200,116,1320,128L1440,140L1440,180L0,180Z" />
+        </svg>
     </div>
-</div>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="nav-inner">
+            <a href="/" class="logo">
+                <div class="logo-hex">FM</div>
+                <div class="logo-txt">
+                    <span class="logo-name">FEEMO</span>
+                    <span class="logo-tag">WHATSAPP BOT</span>
+                </div>
+            </a>
+            <div class="nav-right">
+                <a href="https://github.com/feemo0/FAHEEM-MD" class="nav-link">HOME</a>
+                <a href="/pair" class="nav-link">PAIR</a>
+                <div class="theme-pill" onclick="toggleTheme()">
+                    <span class="pill-icon" id="themeIcon">🌙</span>
+                    <div class="pill-track">
+                        <div class="pill-thumb"></div>
+                    </div>
+                    <span class="pill-lbl" id="themeLabel">NIGHT</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <main class="hero">
+
+        <div class="hero-badge">
+            <span class="bdot"></span>
+            QR SCANNER · SCAN TO CONNECT
+        </div>
+
+        <h1 class="hero-title">QR CODE</h1>
+        <p class="hero-sub">Scan with WhatsApp to link your device</p>
+
+        <div class="electric-card">
+            <div class="corner c-tl"></div>
+            <div class="corner c-tr"></div>
+            <div class="corner c-bl"></div>
+            <div class="corner c-br"></div>
+
+            <p class="card-title">📷 FAHEEM-MD QR SCANNING</p>
+
+            <!-- QR Image — src UNCHANGED -->
+            <div class="qr-wrap">
+                <img id="qr-image" src="/server" alt="QR CODE">
+                <div class="qr-scan"></div>
+            </div>
+
+            <!-- Status — IDs UNCHANGED -->
+            <div class="qr-status">
+                <div id="main">FAHEEM-MD QR SCANNING</div>
+                <div id="legend">Scan The QR Code</div>
+            </div>
+
+            <!-- Progress — ID UNCHANGED -->
+            <div class="progress-wrap">
+                <div class="timer-row">
+                    <span class="timer-lbl">EXPIRES IN</span>
+                    <span id="timerCount">30</span>
+                </div>
+                <progress value="0" max="30" id="progressBar"></progress>
+            </div>
+
+            <!-- Reload — original href UNCHANGED -->
+            <a href="javascript:history.go(0)" class="reload-btn">
+                <div class="sw"></div>
+                <span>🔄 Reload Page</span>
+            </a>
+
+        </div>
+    </main>
+
+    <footer>
+        © <b>FEEMO</b> &nbsp;·&nbsp; Developed For &#x1F1F5;&#x1F1F0;
+        with ❤️ <b>BY</b> 🌐 &copy; <span id="yr"></span>
+    </footer>
+
+    <script>
+        document.getElementById('yr').textContent = new Date().getFullYear();
+
+        /* Theme */
+        function toggleTheme() {
+            const h = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            const label = document.getElementById('themeLabel');
+            const isDark = h.getAttribute('data-theme') === 'dark';
+            h.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            icon.textContent = isDark ? '☀️' : '🌙';
+            label.textContent = isDark ? 'DAY' : 'NIGHT';
+            try { localStorage.setItem('feemo-theme', isDark ? 'light' : 'dark'); } catch (e) { }
+        }
+        try {
+            const s = localStorage.getItem('feemo-theme');
+            if (s && s !== 'dark') {
+                document.documentElement.setAttribute('data-theme', s);
+                document.getElementById('themeIcon').textContent = '☀️';
+                document.getElementById('themeLabel').textContent = 'DAY';
+            }
+        } catch (e) { }
+
+        /* Particles */
+        (function () {
+            const canvas = document.getElementById('bg-canvas');
+            const ctx = canvas.getContext('2d');
+            let W, H, particles = [];
+            function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+            window.addEventListener('resize', resize); resize();
+            function getColor() { return getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#00ff8c'; }
+            class P {
+                constructor() { this.reset(true); }
+                reset(init) {
+                    this.x = Math.random() * W; this.y = init ? Math.random() * H : H + 10;
+                    this.r = Math.random() * 1.6 + .3; this.sp = Math.random() * .55 + .18;
+                    this.vx = (Math.random() - .5) * .35; this.mo = Math.random() * .4 + .1;
+                    this.op = 0; this.col = getColor();
+                }
+                tick() {
+                    this.y -= this.sp; this.x += this.vx;
+                    this.op = this.y > H * .88 ? ((H - this.y) / (H * .12)) * this.mo : this.y < H * .12 ? (this.y / (H * .12)) * this.mo : this.mo;
+                    if (this.y < -10) this.reset(false);
+                }
+                draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2); ctx.fillStyle = this.col; ctx.globalAlpha = Math.max(0, this.op); ctx.fill(); }
+            }
+            for (let i = 0; i < 60; i++) particles.push(new P());
+            function loop() { ctx.clearRect(0, 0, W, H); ctx.globalAlpha = 1; particles.forEach(p => { p.tick(); p.draw(); }); requestAnimationFrame(loop); }
+            loop();
+            new MutationObserver(() => { const c = getColor(); particles.forEach(p => p.col = c); })
+                .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+        })();
+    </script>
 </body>
+
 </html>
