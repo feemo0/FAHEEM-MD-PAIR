@@ -1,136 +1,556 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="" type="image/x-icon">
+  <title>FEEMO — FAHEEM-MD Pair Site</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg: #020610;
+      --surface: rgba(10, 20, 50, 0.6);
+      --glass: rgba(255,255,255,0.06);
+      --border: rgba(0, 200, 255, 0.25);
+      --accent: #00cfff;
+      --accent2: #00ff99;
+      --accent3: #ff3cac;
+      --text: #e8f4ff;
+      --muted: rgba(200,230,255,0.5);
+      --nav-bg: rgba(5, 12, 35, 0.75);
+      --card-bg: rgba(10, 22, 55, 0.55);
+      --wave1: #001133;
+      --wave2: #002255;
+      --glow: 0 0 30px rgba(0,207,255,0.35), 0 0 60px rgba(0,207,255,0.15);
+    }
+    [data-theme="light"] {
+      --bg: #e8f4ff;
+      --surface: rgba(220,240,255,0.7);
+      --glass: rgba(255,255,255,0.55);
+      --border: rgba(0,130,200,0.35);
+      --accent: #0080cc;
+      --accent2: #00aa55;
+      --accent3: #cc0077;
+      --text: #05182e;
+      --muted: rgba(10,50,100,0.55);
+      --nav-bg: rgba(220,240,255,0.82);
+      --card-bg: rgba(200,230,255,0.55);
+      --wave1: #b8d8f8;
+      --wave2: #d0e8ff;
+      --glow: 0 0 30px rgba(0,130,200,0.25), 0 0 60px rgba(0,130,200,0.1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
     body {
-      background-color: black;
+      font-family: 'Exo 2', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background-color 0.4s, color 0.4s;
+    }
+
+    /* ── WAVY BACKGROUND ── */
+    .wave-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .wave-bg svg {
+      position: absolute;
+      bottom: 0;
+      width: 200%;
+      animation: waveShift 12s ease-in-out infinite alternate;
+    }
+    .wave-bg svg:nth-child(2) { bottom: -60px; animation-delay: -4s; animation-duration: 16s; opacity: 0.6; }
+    .wave-bg svg:nth-child(3) { bottom: -120px; animation-delay: -8s; animation-duration: 20s; opacity: 0.35; }
+    @keyframes waveShift {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Floating particles */
+    .particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0;
+      animation: floatParticle var(--dur, 8s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+    }
+    @keyframes floatParticle {
+      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+      20%  { opacity: 0.5; }
+      80%  { opacity: 0.3; }
+      100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
       display: flex;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      color: white;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 4px 32px rgba(0,0,0,0.35);
+      transition: background 0.4s;
+    }
+    .logo {
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: 1.7rem;
+      letter-spacing: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
+      position: relative;
+    }
+    .logo::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 2px;
+      box-shadow: 0 0 10px var(--accent);
     }
 
-    {
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "url": "https://railway.app",
-            "logo": "https://files.catbox.moe/hg5hj6.jpg"
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+
+    .nav-badge {
+      font-size: 0.7rem;
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent2);
+      border: 1px solid var(--accent2);
+      border-radius: 20px;
+      padding: 3px 10px;
+      opacity: 0.85;
     }
 
-    .button-container {
-      text-align: center;
+    /* Toggle */
+    .theme-toggle {
+      position: relative;
+      width: 52px; height: 28px;
+      cursor: pointer;
+    }
+    .theme-toggle input { display: none; }
+    .toggle-track {
+      width: 52px; height: 28px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #0a1835, #001155);
+      border: 1px solid var(--accent);
+      box-shadow: 0 0 10px rgba(0,207,255,0.3);
+      transition: all 0.4s;
+      display: flex; align-items: center;
+      padding: 0 4px;
+    }
+    [data-theme="light"] .toggle-track {
+      background: linear-gradient(135deg, #cce8ff, #99d0ff);
+    }
+    .toggle-thumb {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      box-shadow: 0 0 8px var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+    }
+    .theme-toggle input:checked ~ .toggle-track .toggle-thumb {
+      transform: translateX(24px);
+    }
+    [data-theme="light"] .toggle-thumb { background: #0080cc; box-shadow: 0 0 8px #0080cc; }
+
+    /* ── HERO / MAIN ── */
+    main {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
+      padding: 100px 1.5rem 80px;
     }
 
-    h3 {
-      margin-top: -40px;
+    .hero-title {
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: clamp(1.4rem, 4vw, 2.4rem);
+      text-align: center;
+      letter-spacing: 3px;
+      line-height: 1.4;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--text) 30%, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: heroIn 1s ease forwards;
       opacity: 0;
-      animation: fadeIn 3s forwards;
+      transform: translateY(20px);
+    }
+    @keyframes heroIn {
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .button {
-      width: 140px;
-      height: 40px;
+    .hero-sub {
+      font-size: 0.9rem;
+      font-weight: 300;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 2.5rem;
+      animation: heroIn 1s 0.3s ease forwards;
+      opacity: 0;
+    }
+
+    .divider {
+      width: 180px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      margin: 0 auto 2.5rem;
+      animation: heroIn 1s 0.5s ease forwards;
+      opacity: 0;
+    }
+
+    /* ── CARD GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.2rem;
+      max-width: 900px;
+      width: 100%;
+      animation: heroIn 1s 0.6s ease forwards;
+      opacity: 0;
+    }
+
+    /* ── ELECTRIC BUTTON ── */
+    .e-btn {
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      padding: 0px 15px;
-      background-color: red;
-      border-radius: 10px;
-      border: none;
-      color: white;
-      position: relative;
-      cursor: pointer;
-      font-weight: 900;
-      transition-duration: .2s;
-      background: linear-gradient(0deg, #000, #272727);
+      padding: 14px 20px;
+      border-radius: 12px;
       text-decoration: none;
-    }
-
-  
-    footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #222; /* Darker gray footer background */
-    color: #fff;
-    padding: 10px 0;
-    text-align: center;
-    font-size: 14px;
-    
-  }
-    .button:before, .button:after {
-      content: '';
-      position: absolute;
-      left: -2px;
-      top: -2px;
-      border-radius: 10px;
-      background: linear-gradient(45deg, #48ff00, #15ff00, #000000,#000000, #ff0000);
-      background-size: 400%;
-      width: calc(100% + 4px);
-      height: calc(100% + 4px);
-      z-index: -1;
-      animation: steam 10s linear infinite;
-    }
-
-    @keyframes steam {
-      0% {
-        background-position: 0 0;
-      }
-
-      50% {
-        background-position: 400% 0;
-      }
-
-      100% {
-        background-position: 0 0;
-      }
-    }
-
-    .button:after {
-      filter: blur(50px);
-    }
-
-    .button span {
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 600;
+      font-size: 0.92rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text);
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: none;
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.3s;
       z-index: 1;
     }
 
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
+    .e-btn::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 14px;
+      padding: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3), var(--accent));
+      background-size: 300% 100%;
+      animation: electricFlow 3s linear infinite;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+      z-index: -1;
+    }
+
+    .e-btn::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 14px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3), var(--accent));
+      background-size: 300% 100%;
+      animation: electricFlow 3s linear infinite;
+      filter: blur(10px);
+      opacity: 0.25;
+      z-index: -2;
+      transition: opacity 0.3s;
+    }
+
+    @keyframes electricFlow {
+      0%   { background-position: 0% 50%; }
+      100% { background-position: 300% 50%; }
+    }
+
+    .e-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: var(--glow);
+    }
+    .e-btn:hover::after { opacity: 0.5; }
+    .e-btn:active { transform: translateY(0) scale(0.98); }
+
+    .e-btn .icon { font-size: 1.1rem; }
+
+    /* Special primary button */
+    .e-btn.primary {
+      background: linear-gradient(135deg, rgba(0,207,255,0.15), rgba(0,255,153,0.1));
+    }
+    .e-btn.primary::before {
+      background: linear-gradient(90deg, var(--accent2), var(--accent), var(--accent2));
+      background-size: 200% 100%;
+      animation: electricFlow 2s linear infinite;
+    }
+
+    .e-btn.danger {
+      background: linear-gradient(135deg, rgba(255,60,172,0.12), rgba(255,100,50,0.1));
+    }
+    .e-btn.danger::before {
+      background: linear-gradient(90deg, var(--accent3), #ff8800, var(--accent3));
+      background-size: 200% 100%;
+    }
+
+    /* Label inside */
+    .e-btn span { position: relative; z-index: 2; }
+
+    /* ── STATUS CHIP ── */
+    .status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 2rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent2);
+      animation: heroIn 1s 0.4s forwards;
+      opacity: 0;
+    }
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent2);
+      box-shadow: 0 0 8px var(--accent2);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 6px var(--accent2); transform: scale(1); }
+      50% { box-shadow: 0 0 14px var(--accent2), 0 0 28px var(--accent2); transform: scale(1.2); }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      padding: 10px 2rem;
+      text-align: center;
+      font-size: 0.75rem;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      font-family: 'Orbitron', monospace;
+    }
+    footer span { color: var(--accent); }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      width: 100%;
+      max-width: 420px;
+    }
+    .btn-group + .btn-group { margin-top: 1.2rem; }
+
+    /* Two column row */
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .all-btns {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      animation: heroIn 1s 0.6s ease forwards;
+      opacity: 0;
+    }
+
+    /* Glow line between groups */
+    .glow-divider {
+      width: 100%;
+      max-width: 420px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 1.2rem 0;
     }
   </style>
 </head>
 <body>
-  <div class="button-container">
-    <h3> 💛 WELCOME TO FAHEEM-MD PAIR SITE 💙</h3>
-    <br>
-    <h3> 💙MMULTI DEVICE BEST WHATSAPP BOT 💛</h3>
-    <br>
-    <h3> 💚 FAHEEM-MD SESSION SECTION 💚</h3>
-    <div></div>
-    <a href="/qr" class="button" target="_blank"> <span>QR-CODE</span> </a> <br>
-    <a href="/pair" class="button" target="_blank"> <span>PAIRING-CODE</span> </a> <br>
-    <a href="https://github.com/feemo0/FAHEEM-MD" class="button" target="_blank"> <span>FORK BOT</span> </a> <br>
-    <a href="https://whatsapp.com/channel/0029VbBDkMV05MUnspQOhf1A" class="button" target="_blank"> <span>SUPPORT CHANNEL</span> </a> <br>
-    <a href="https://www.youtube.com/@FAHEEM501" class="button" target="_blank"> <span>SUBSCRIBE YT-CHANNEL</span> </a> <br>
 
-    <p>🌐 IF YOU HAVE ANY ERROR FAHEEM-BOT TELL ME 🌐</p>
+  <!-- Wavy background -->
+  <div class="wave-bg">
+    <svg viewBox="0 0 1440 280" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="var(--wave1)" d="M0,160 C360,260 720,60 1080,180 C1260,240 1380,200 1440,170 L1440,320 L0,320Z"/>
+      <path fill="var(--wave2)" opacity="0.5" d="M0,200 C200,140 500,260 780,190 C1060,120 1300,230 1440,200 L1440,320 L0,320Z"/>
+    </svg>
+    <svg viewBox="0 0 1440 280" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="var(--wave2)" d="M0,220 C300,160 600,280 900,210 C1100,160 1300,240 1440,220 L1440,320 L0,320Z"/>
+    </svg>
+    <svg viewBox="0 0 1440 280" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="var(--wave1)" d="M0,240 C400,180 800,300 1200,220 C1320,200 1400,250 1440,240 L1440,320 L0,320Z"/>
+    </svg>
+  </div>
 
-    <a href="https://wa.me/+923154937411?text=*ASLAM_U_ALIKUM_HAVE_ERROR_FAHEEM-MD 🌸*" class="button" target="_blank"> <span>ERROR</span> </a> <br>
+  <!-- Particles -->
+  <div class="particles" id="particles"></div>
 
-    <footer>
-     © FAHEEM : POWERD BY FAHEEM-BOT ❤️ &copy; <span id="currentYear"></span>
-    </footer>
-  
+  <!-- NAVBAR -->
+  <nav>
+    <div class="logo">FEEMO</div>
+    <div class="nav-right">
+      <span class="nav-badge">FAHEEM-MD</span>
+      <label class="theme-toggle" title="Toggle light/dark mode">
+        <input type="checkbox" id="themeToggle" onchange="toggleTheme(this)">
+        <div class="toggle-track">
+          <div class="toggle-thumb" id="toggleIcon">🌙</div>
+        </div>
+      </label>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main>
+    <div class="hero-title">FAHEEM-MD SESSION HUB</div>
+    <div class="hero-sub">Multi-Device WhatsApp Bot · Next Generation</div>
+    <div class="divider"></div>
+
+    <div class="status-bar">
+      <div class="status-dot"></div>
+      <span>System Online &amp; Ready</span>
+    </div>
+
+    <div class="all-btns">
+
+      <!-- Session pairing -->
+      <p class="section-label">⚡ Session Setup</p>
+      <div class="btn-row">
+        <a href="/qr" class="e-btn primary" target="_blank">
+          <span class="icon">📷</span>
+          <span>QR Code</span>
+        </a>
+        <a href="/pair" class="e-btn primary" target="_blank">
+          <span class="icon">🔗</span>
+          <span>Pair Code</span>
+        </a>
+      </div>
+
+      <div class="glow-divider"></div>
+
+      <!-- Resources -->
+      <p class="section-label">🚀 Resources</p>
+      <div class="btn-group">
+        <a href="https://github.com/feemo0/FAHEEM-MD" class="e-btn" target="_blank">
+          <span class="icon">🍴</span>
+          <span>Fork Bot on GitHub</span>
+        </a>
+        <a href="https://whatsapp.com/channel/0029VbBDkMV05MUnspQOhf1A" class="e-btn" target="_blank">
+          <span class="icon">💬</span>
+          <span>Support Channel</span>
+        </a>
+        <a href="https://www.youtube.com/@FAHEEM501" class="e-btn" target="_blank">
+          <span class="icon">▶️</span>
+          <span>Subscribe YT Channel</span>
+        </a>
+      </div>
+
+      <div class="glow-divider"></div>
+
+      <!-- Support -->
+      <p class="section-label">🛠 Need Help?</p>
+      <div class="btn-group">
+        <a href="https://wa.me/+923154937411?text=*ASLAM_U_ALIKUM_HAVE_ERROR_FAHEEM-MD 🌸*" class="e-btn danger" target="_blank">
+          <span class="icon">⚠️</span>
+          <span>Report an Error</span>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    © <span>FEEMO</span> · Powered by FAHEEM-BOT ❤️ &nbsp;·&nbsp; <span id="currentYear"></span>
+  </footer>
+
+  <script>
+    // Year
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+    // Particles
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 22; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random() * 4 + 2;
+      p.style.cssText = `
+        width: ${size}px; height: ${size}px;
+        left: ${Math.random() * 100}%;
+        --dur: ${6 + Math.random() * 10}s;
+        --delay: -${Math.random() * 12}s;
+        background: ${Math.random() > 0.5 ? 'var(--accent)' : 'var(--accent2)'};
+      `;
+      container.appendChild(p);
+    }
+
+    // Theme toggle
+    function toggleTheme(cb) {
+      const icon = document.getElementById('toggleIcon');
+      if (cb.checked) {
+        document.documentElement.setAttribute('data-theme', 'light');
+        icon.textContent = '☀️';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        icon.textContent = '🌙';
+      }
+    }
+  </script>
 </body>
 </html>
