@@ -1,556 +1,1017 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FEEMO — FAHEEM-MD Pair Site</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #1e1e1f;
-      --surface: rgba(10, 20, 50, 0.6);
-      --glass: rgba(255,255,255,0.06);
-      --border: rgba(0, 200, 255, 0.25);
-      --accent: #00cfff;
-      --accent2: #00ff99;
-      --accent3: #ff3cac;
-      --text: #e8f4ff;
-      --muted: rgba(200,230,255,0.5);
-      --nav-bg: rgba(5, 12, 35, 0.75);
-      --card-bg: rgba(10, 22, 55, 0.55);
-      --wave1: #001133;
-      --wave2: #002255;
-      --glow: 0 0 30px rgba(0,207,255,0.35), 0 0 60px rgba(0,207,255,0.15);
-    }
-    [data-theme="light"] {
-      --bg: #e8f4ff;
-      --surface: rgba(220,240,255,0.7);
-      --glass: rgba(255,255,255,0.55);
-      --border: rgba(0,130,200,0.35);
-      --accent: #0080cc;
-      --accent2: #00aa55;
-      --accent3: #cc0077;
-      --text: #05182e;
-      --muted: rgba(10,50,100,0.55);
-      --nav-bg: rgba(220,240,255,0.82);
-      --card-bg: rgba(200,230,255,0.55);
-      --wave1: #b8d8f8;
-      --wave2: #d0e8ff;
-      --glow: 0 0 30px rgba(0,130,200,0.25), 0 0 60px rgba(0,130,200,0.1);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FEEMO — FAHEEM-MD Session</title>
+    <link rel="shortcut icon" href="" type="image/x-icon">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Space+Mono&display=swap"
+        rel="stylesheet">
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <style>
+        :root {
+            --bg: #1e1e1f;
+            --navbar-bg: rgba(3, 6, 15, 0.72);
+            --glass: rgba(0, 255, 140, 0.04);
+            --glass-border: rgba(0, 255, 140, 0.18);
+            --text: #dfffec;
+            --text-muted: rgba(120, 255, 180, 0.55);
+            --accent: #00ff8c;
+            --accent2: #00d4ff;
+            --accent3: #ff2d55;
+            --accent-glow: rgba(0, 255, 140, 0.28);
+            --card: rgba(228, 235, 231, 0.035);
+            --footer-bg: rgba(3, 6, 15, 0.92);
+            --wave-a: rgba(0, 255, 140, 0.07);
+            --wave-b: rgba(0, 180, 255, 0.05);
+        }
 
-    html { scroll-behavior: smooth; }
+        [data-theme="light"] {
+            --bg: #d4d6d5;
+            --navbar-bg: rgba(237, 255, 245, 0.78);
+            --glass: rgba(0, 170, 90, 0.07);
+            --glass-border: rgba(0, 170, 90, 0.22);
+            --text: #012b15;
+            --text-muted: rgba(0, 120, 60, 0.6);
+            --accent: #008f52;
+            --accent2: #0070b8;
+            --accent3: #cc1133;
+            --accent-glow: rgba(0, 145, 82, 0.22);
+            --card: rgba(255, 255, 255, 0.055);
+            --footer-bg: rgba(220, 255, 238, 0.95);
+            --wave-a: rgba(0, 170, 90, 0.08);
+            --wave-b: rgba(0, 160, 220, 0.06);
+            --text: white;
+        }
 
-    body {
-      font-family: 'Exo 2', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
-      transition: background-color 0.4s, color 0.4s;
-    }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    /* ── WAVY BACKGROUND ── */
-    .wave-bg {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      overflow: hidden;
-      pointer-events: none;
-    }
-    .wave-bg svg {
-      position: absolute;
-      bottom: 0;
-      width: 200%;
-      animation: waveShift 12s ease-in-out infinite alternate;
-    }
-    .wave-bg svg:nth-child(2) { bottom: -60px; animation-delay: -4s; animation-duration: 16s; opacity: 0.6; }
-    .wave-bg svg:nth-child(3) { bottom: -120px; animation-delay: -8s; animation-duration: 20s; opacity: 0.35; }
-    @keyframes waveShift {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
+        html {
+            scroll-behavior: smooth;
+        }
 
-    /* Floating particles */
-    .particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-    .particle {
-      position: absolute;
-      border-radius: 50%;
-      background: var(--accent);
-      opacity: 0;
-      animation: floatParticle var(--dur, 8s) ease-in-out infinite;
-      animation-delay: var(--delay, 0s);
-    }
-    @keyframes floatParticle {
-      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
-      20%  { opacity: 0.5; }
-      80%  { opacity: 0.3; }
-      100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
-    }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background .45s, color .45s;
+        }
 
-    /* ── NAVBAR ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      height: 64px;
-      background: var(--nav-bg);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      border-bottom: 1px solid var(--border);
-      box-shadow: 0 4px 32px rgba(0,0,0,0.35);
-      transition: background 0.4s;
-    }
-    .logo {
-      font-family: 'Orbitron', monospace;
-      font-weight: 900;
-      font-size: 1.7rem;
-      letter-spacing: 4px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: none;
-      position: relative;
-    }
-    .logo::after {
-      content: '';
-      position: absolute;
-      bottom: -4px; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      border-radius: 2px;
-      box-shadow: 0 0 10px var(--accent);
-    }
+        /* BG Canvas */
+        #bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
 
-    .nav-right { display: flex; align-items: center; gap: 1rem; }
+        /* Grid */
+        .grid-veil {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(0, 255, 140, .025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 140, .025) 1px, transparent 1px);
+            background-size: 55px 55px;
+        }
 
-    .nav-badge {
-      font-size: 0.7rem;
-      font-family: 'Exo 2', sans-serif;
-      font-weight: 600;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--accent2);
-      border: 1px solid var(--accent2);
-      border-radius: 20px;
-      padding: 3px 10px;
-      opacity: 0.85;
-    }
+        /* Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(90px);
+        }
 
-    /* Toggle */
-    .theme-toggle {
-      position: relative;
-      width: 52px; height: 28px;
-      cursor: pointer;
-    }
-    .theme-toggle input { display: none; }
-    .toggle-track {
-      width: 52px; height: 28px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #0a1835, #001155);
-      border: 1px solid var(--accent);
-      box-shadow: 0 0 10px rgba(0,207,255,0.3);
-      transition: all 0.4s;
-      display: flex; align-items: center;
-      padding: 0 4px;
-    }
-    [data-theme="light"] .toggle-track {
-      background: linear-gradient(135deg, #cce8ff, #99d0ff);
-    }
-    .toggle-thumb {
-      width: 20px; height: 20px;
-      border-radius: 50%;
-      background: var(--accent);
-      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
-      box-shadow: 0 0 8px var(--accent);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px;
-    }
-    .theme-toggle input:checked ~ .toggle-track .toggle-thumb {
-      transform: translateX(24px);
-    }
-    [data-theme="light"] .toggle-thumb { background: #0080cc; box-shadow: 0 0 8px #0080cc; }
+        .o1 {
+            width: 520px;
+            height: 520px;
+            top: -160px;
+            left: -160px;
+            background: radial-gradient(circle, rgba(0, 255, 140, .09), transparent 70%);
+            animation: orbf 18s ease-in-out infinite;
+        }
 
-    /* ── HERO / MAIN ── */
-    main {
-      position: relative;
-      z-index: 10;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 100px 1.5rem 80px;
-    }
+        .o2 {
+            width: 380px;
+            height: 380px;
+            bottom: -80px;
+            right: -80px;
+            background: radial-gradient(circle, rgba(0, 212, 255, .07), transparent 70%);
+            animation: orbf 22s ease-in-out infinite reverse 3s;
+        }
 
-    .hero-title {
-      font-family: 'Orbitron', monospace;
-      font-weight: 900;
-      font-size: clamp(1.4rem, 4vw, 2.4rem);
-      text-align: center;
-      letter-spacing: 3px;
-      line-height: 1.4;
-      margin-bottom: 0.5rem;
-      background: linear-gradient(135deg, var(--text) 30%, var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: heroIn 1s ease forwards;
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    @keyframes heroIn {
-      to { opacity: 1; transform: translateY(0); }
-    }
+        .o3 {
+            width: 260px;
+            height: 260px;
+            top: 45%;
+            left: 35%;
+            background: radial-gradient(circle, rgba(255, 45, 85, .05), transparent 70%);
+            animation: orbf 28s ease-in-out infinite 8s;
+        }
 
-    .hero-sub {
-      font-size: 0.9rem;
-      font-weight: 300;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-align: center;
-      margin-bottom: 2.5rem;
-      animation: heroIn 1s 0.3s ease forwards;
-      opacity: 0;
-    }
+        @keyframes orbf {
 
-    .divider {
-      width: 180px; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      margin: 0 auto 2.5rem;
-      animation: heroIn 1s 0.5s ease forwards;
-      opacity: 0;
-    }
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1)
+            }
 
-    /* ── CARD GRID ── */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.2rem;
-      max-width: 900px;
-      width: 100%;
-      animation: heroIn 1s 0.6s ease forwards;
-      opacity: 0;
-    }
+            33% {
+                transform: translate(40px, -55px) scale(1.05)
+            }
 
-    /* ── ELECTRIC BUTTON ── */
-    .e-btn {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 14px 20px;
-      border-radius: 12px;
-      text-decoration: none;
-      font-family: 'Exo 2', sans-serif;
-      font-weight: 600;
-      font-size: 0.92rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--text);
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: none;
-      cursor: pointer;
-      overflow: hidden;
-      transition: transform 0.2s, box-shadow 0.3s;
-      z-index: 1;
-    }
+            66% {
+                transform: translate(-30px, 30px) scale(.96)
+            }
+        }
 
-    .e-btn::before {
-      content: '';
-      position: absolute;
-      inset: -2px;
-      border-radius: 14px;
-      padding: 2px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3), var(--accent));
-      background-size: 300% 100%;
-      animation: electricFlow 3s linear infinite;
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: destination-out;
-      mask-composite: exclude;
-      z-index: -1;
-    }
+        /* Waves */
+        .waves {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
 
-    .e-btn::after {
-      content: '';
-      position: absolute;
-      inset: -2px;
-      border-radius: 14px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3), var(--accent));
-      background-size: 300% 100%;
-      animation: electricFlow 3s linear infinite;
-      filter: blur(10px);
-      opacity: 0.25;
-      z-index: -2;
-      transition: opacity 0.3s;
-    }
+        .waves svg {
+            display: block;
+            width: 200%;
+        }
 
-    @keyframes electricFlow {
-      0%   { background-position: 0% 50%; }
-      100% { background-position: 300% 50%; }
-    }
+        .w1 {
+            position: absolute;
+            bottom: 0;
+            animation: wm1 13s ease-in-out infinite;
+            fill: var(--wave-a);
+        }
 
-    .e-btn:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: var(--glow);
-    }
-    .e-btn:hover::after { opacity: 0.5; }
-    .e-btn:active { transform: translateY(0) scale(0.98); }
+        .w2 {
+            position: absolute;
+            bottom: 0;
+            animation: wm2 17s ease-in-out infinite reverse;
+            fill: var(--wave-b);
+        }
 
-    .e-btn .icon { font-size: 1.1rem; }
+        .w3 {
+            position: absolute;
+            bottom: 0;
+            animation: wm1 21s ease-in-out infinite 4s;
+            fill: rgba(255, 45, 85, .03);
+        }
 
-    /* Special primary button */
-    .e-btn.primary {
-      background: linear-gradient(135deg, rgba(0,207,255,0.15), rgba(0,255,153,0.1));
-    }
-    .e-btn.primary::before {
-      background: linear-gradient(90deg, var(--accent2), var(--accent), var(--accent2));
-      background-size: 200% 100%;
-      animation: electricFlow 2s linear infinite;
-    }
+        @keyframes wm1 {
 
-    .e-btn.danger {
-      background: linear-gradient(135deg, rgba(255,60,172,0.12), rgba(255,100,50,0.1));
-    }
-    .e-btn.danger::before {
-      background: linear-gradient(90deg, var(--accent3), #ff8800, var(--accent3));
-      background-size: 200% 100%;
-    }
+            0%,
+            100% {
+                transform: translateX(0) scaleY(1)
+            }
 
-    /* Label inside */
-    .e-btn span { position: relative; z-index: 2; }
+            50% {
+                transform: translateX(-8%) scaleY(1.12)
+            }
+        }
 
-    /* ── STATUS CHIP ── */
-    .status-bar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 2rem;
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--accent2);
-      animation: heroIn 1s 0.4s forwards;
-      opacity: 0;
-    }
-    .status-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--accent2);
-      box-shadow: 0 0 8px var(--accent2);
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 6px var(--accent2); transform: scale(1); }
-      50% { box-shadow: 0 0 14px var(--accent2), 0 0 28px var(--accent2); transform: scale(1.2); }
-    }
+        @keyframes wm2 {
 
-    /* ── FOOTER ── */
-    footer {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      z-index: 100;
-      background: var(--nav-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-top: 1px solid var(--border);
-      padding: 10px 2rem;
-      text-align: center;
-      font-size: 0.75rem;
-      letter-spacing: 1.5px;
-      color: var(--muted);
-      font-family: 'Orbitron', monospace;
-    }
-    footer span { color: var(--accent); }
+            0%,
+            100% {
+                transform: translateX(-4%) scaleY(1)
+            }
 
-    /* ── SECTION LABEL ── */
-    .section-label {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.6rem;
-    }
-    .btn-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.9rem;
-      width: 100%;
-      max-width: 420px;
-    }
-    .btn-group + .btn-group { margin-top: 1.2rem; }
+            50% {
+                transform: translateX(6%) scaleY(.92)
+            }
+        }
 
-    /* Two column row */
-    .btn-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.9rem;
-      width: 100%;
-      max-width: 420px;
-    }
+        /* ══ NAVBAR ══ */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 200;
+            backdrop-filter: blur(24px) saturate(200%);
+            -webkit-backdrop-filter: blur(24px) saturate(200%);
+            background: var(--navbar-bg);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 2px 32px var(--accent-glow);
+            transition: background .45s, box-shadow .45s;
+        }
 
-    .all-btns {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0;
-      animation: heroIn 1s 0.6s ease forwards;
-      opacity: 0;
-    }
+        .nav-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 13px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
 
-    /* Glow line between groups */
-    .glow-divider {
-      width: 100%;
-      max-width: 420px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--border), transparent);
-      margin: 1.2rem 0;
-    }
-  </style>
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .logo-hex {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: 13px;
+            color: #000;
+            box-shadow: 0 0 22px var(--accent), 0 0 50px rgba(0, 255, 140, .2);
+            animation: hexPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes hexPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 22px var(--accent), 0 0 50px rgba(0, 255, 140, .2)
+            }
+
+            50% {
+                box-shadow: 0 0 35px var(--accent), 0 0 80px rgba(0, 255, 140, .35)
+            }
+        }
+
+        .logo-txt {
+            line-height: 1;
+        }
+
+        .logo-name {
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: 19px;
+            letter-spacing: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-tag {
+            display: block;
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 2.5px;
+            color: var(--text-muted);
+            -webkit-text-fill-color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 2px;
+            padding: 6px 13px;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            text-transform: uppercase;
+            transition: all .25s;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            color: var(--accent);
+            border-color: var(--glass-border);
+            background: var(--glass);
+            text-shadow: 0 0 10px var(--accent);
+        }
+
+        /* Theme pill */
+        .theme-pill {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            cursor: pointer;
+            padding: 7px 14px;
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            transition: all .3s;
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        .theme-pill:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 18px var(--accent-glow);
+        }
+
+        .pill-track {
+            width: 34px;
+            height: 18px;
+            background: var(--glass-border);
+            border-radius: 18px;
+            position: relative;
+            transition: background .3s;
+        }
+
+        [data-theme="light"] .pill-track {
+            background: var(--accent);
+        }
+
+        .pill-thumb {
+            width: 12px;
+            height: 12px;
+            background: var(--text);
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            transition: transform .3s, background .3s;
+            box-shadow: 0 0 6px var(--accent-glow);
+        }
+
+        [data-theme="light"] .pill-thumb {
+            transform: translateX(16px);
+            background: #fff;
+        }
+
+        .pill-icon {
+            font-size: 14px;
+        }
+
+        .pill-lbl {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+
+
+        /* ══ HERO ══ */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 110px 20px 80px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 7px 20px;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2.5px;
+            color: var(--accent);
+            margin-bottom: 30px;
+            animation: badgePop .8s cubic-bezier(.34, 1.56, .64, 1) both .1s;
+        }
+
+        @keyframes badgePop {
+            from {
+                opacity: 0;
+                transform: scale(.8) translateY(10px)
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0)
+            }
+        }
+
+        .bdot {
+            width: 7px;
+            height: 7px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent);
+            animation: blink 1.6s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .2
+            }
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: clamp(36px, 3vw, 80px);
+            letter-spacing: 6px;
+            line-height: 1;
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 45%, #fff 55%, var(--accent) 100%);
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleFlow 5s linear infinite, titleIn .9s cubic-bezier(.34, 1.56, .64, 1) both .25s;
+            filter: drop-shadow(0 0 30px rgba(0, 255, 140, .25));
+        }
+
+        @keyframes titleFlow {
+            0% {
+                background-position: 0% center
+            }
+
+            100% {
+                background-position: 300% center
+            }
+        }
+
+        @keyframes titleIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(.95)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1)
+            }
+        }
+
+        .hero-sub {
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(10px, 2vw, 14px);
+            letter-spacing: 5px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 52px;
+            animation: fadeSlide .8s ease both .45s;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(16px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: var(--accent);
+            border-style: solid;
+        }
+
+        .c-tl {
+            top: 12px;
+            left: 12px;
+            border-width: 2px 0 0 2px;
+        }
+
+        .c-tr {
+            top: 12px;
+            right: 12px;
+            border-width: 2px 2px 0 0;
+        }
+
+        .c-bl {
+            bottom: 12px;
+            left: 12px;
+            border-width: 0 0 2px 2px;
+        }
+
+        .c-br {
+            bottom: 12px;
+            right: 12px;
+            border-width: 0 2px 2px 0;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: var(--accent);
+            text-align: center;
+            margin-bottom: 28px;
+            text-transform: uppercase;
+        }
+
+        /* ══ BUTTONS ══ */
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .ebtn {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            padding: 15px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 10px;
+            letter-spacing: 1.8px;
+            color: var(--text);
+            background: var(--card);
+            border: 1px solid var(--glass-border);
+            transition: transform .25s, box-shadow .25s, color .25s;
+            overflow: hidden;
+            text-transform: uppercase;
+            backdrop-filter: blur(8px);
+            cursor: pointer;
+        }
+
+
+        .electric-card {
+            position: relative;
+            padding: 20px;
+            background: #111;
+            color: white;
+            border-radius: 12px;
+        }
+
+        .electric-card::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #00f7ff, #ff00ff, #00f7ff);
+            background-size: 300% 300%;
+            animation: electricMove 4s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes electricMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: 300% 50%;
+            }
+        }
+
+
+        .ebtn:hover::before,
+        .ebtn:hover::after {
+            opacity: 1;
+        }
+
+        .ebtn:active {
+            transform: translateY(-1px);
+        }
+
+        .ebtn .sw {
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent, rgba(0, 255, 140, .07), transparent);
+            transition: top .5s;
+            pointer-events: none;
+        }
+
+        .ebtn:hover .sw {
+            top: 100%;
+        }
+
+        .ebtn .eico {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .ebtn .etxt {
+            line-height: 1.25;
+        }
+
+        .ebtn .etxt small {
+            display: block;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 10px;
+            letter-spacing: 1px;
+            opacity: .6;
+            margin-top: 1px;
+            font-weight: 400;
+        }
+
+        /* ALL buttons — always electric spinning border like the card shimmer */
+        @property --angle {
+            syntax: '<angle>';
+            inherits: false;
+            initial-value: 0deg;
+        }
+
+        .ebtn {
+            border-color: transparent !important;
+        }
+
+        .ebtn::before {
+            opacity: 1 !important;
+            background: conic-gradient(from var(--angle), var(--accent), var(--accent2), transparent, transparent, var(--accent));
+            animation: spinBorder 3s linear infinite;
+        }
+
+        .ebtn::after {
+            opacity: .3 !important;
+        }
+
+        @keyframes spinBorder {
+            to {
+                --angle: 360deg;
+            }
+        }
+
+
+
+        /* Danger */
+        .ebtn.danger::before {
+            background: conic-gradient(from var(--angle), var(--accent3), #ff6600, transparent, transparent, var(--accent3));
+            animation: spinBorder 3s linear infinite;
+        }
+
+        .ebtn.danger:hover {
+            color: var(--text);
+            box-shadow: 0 8px 30px rgba(255, 45, 85, .3);
+        }
+
+        /* Full width */
+        .ebtn.full {
+            grid-column: 1 / -1;
+        }
+
+        /* Divider */
+        .divider {
+            grid-column: 1/-1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 4px 0;
+        }
+
+        .divider hr {
+            flex: 1;
+            border: none;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .divider span {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            white-space: nowrap;
+        }
+
+        /* Error hint */
+        .error-hint {
+            text-align: center;
+            margin-top: 18px;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--text-muted);
+            letter-spacing: 1.5px;
+            line-height: 1.8;
+        }
+
+        /* ══ FOOTER ══ */
+        footer {
+            position: relative;
+            z-index: 1;
+            background: var(--footer-bg);
+            border-top: 1px solid var(--glass-border);
+            backdrop-filter: blur(24px);
+            padding: 18px 20px;
+            text-align: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+        }
+
+        footer b {
+            color: var(--accent);
+            font-weight: 400;
+        }
+
+        /* ══ RESPONSIVE ══ */
+        @media(max-width:768px) {
+            .nav-link {
+                display: none;
+            }
+
+            .hero {
+                padding: 100px 16px 60px;
+            }
+
+            /* .session-card {
+                padding: 28px 18px 24px;
+                border-radius: 16px;
+                max-width: 100%;
+            } */
+            .electric-card {
+                padding: 28px 18px 24px;
+                border-radius: 16px;
+                max-width: 100%;
+            }
+
+            .btn-grid {
+                grid-template-columns: 1fr;
+                gap: 11px;
+            }
+
+            .ebtn.full {
+                grid-column: auto;
+            }
+
+            .divider {
+                display: none;
+            }
+
+            .hero-title {
+                letter-spacing: 2px;
+            }
+
+            .ebtn {
+                padding: 14px 16px;
+                font-size: 9px;
+            }
+        }
+
+        @media(max-width:400px) {
+            .logo-name {
+                font-size: 15px;
+            }
+
+            .logo-tag {
+                font-size: 8px;
+            }
+
+            .logo-hex {
+                width: 36px;
+                height: 36px;
+            }
+
+            .theme-pill .pill-lbl {
+                display: none;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-  <!-- Wavy background -->
-  <div class="wave-bg">
-    <svg viewBox="0 0 1440 280" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill="var(--wave1)" d="M0,160 C360,260 720,60 1080,180 C1260,240 1380,200 1440,170 L1440,320 L0,320Z"/>
-      <path fill="var(--wave2)" opacity="0.5" d="M0,200 C200,140 500,260 780,190 C1060,120 1300,230 1440,200 L1440,320 L0,320Z"/>
-    </svg>
-    <svg viewBox="0 0 1440 280" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill="var(--wave2)" d="M0,220 C300,160 600,280 900,210 C1100,160 1300,240 1440,220 L1440,320 L0,320Z"/>
-    </svg>
-    <svg viewBox="0 0 1440 280" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill="var(--wave1)" d="M0,240 C400,180 800,300 1200,220 C1320,200 1400,250 1440,240 L1440,320 L0,320Z"/>
-    </svg>
-  </div>
+    <canvas id="bg-canvas"></canvas>
+    <div class="grid-veil"></div>
+    <div class="orb o1"></div>
+    <div class="orb o2"></div>
+    <div class="orb o3"></div>
 
-  <!-- Particles -->
-  <div class="particles" id="particles"></div>
+    <div class="waves">
+        <svg class="w1" viewBox="0 0 1440 180" preserveAspectRatio="none" style="height:120px">
+            <path
+                d="M0,80L60,90C120,100,240,120,360,116C480,112,600,84,720,80C840,76,960,96,1080,100C1200,104,1320,88,1380,80L1440,72L1440,180L0,180Z" />
+        </svg>
+        <svg class="w2" viewBox="0 0 1440 180" preserveAspectRatio="none" style="height:100px">
+            <path
+                d="M0,120L80,108C160,96,320,72,480,70C640,68,800,88,960,94C1120,100,1280,88,1360,82L1440,76L1440,180L0,180Z" />
+        </svg>
+        <svg class="w3" viewBox="0 0 1440 180" preserveAspectRatio="none" style="height:80px">
+            <path d="M0,140L120,128C240,116,480,92,720,92C960,92,1200,116,1320,128L1440,140L1440,180L0,180Z" />
+        </svg>
+    </div>
 
-  <!-- NAVBAR -->
-  <nav>
-    <div class="logo">FEEMO</div>
-    <div class="nav-right">
-      <span class="nav-badge">FAHEEM-MD</span>
-      <label class="theme-toggle" title="Toggle light/dark mode">
-        <input type="checkbox" id="themeToggle" onchange="toggleTheme(this)">
-        <div class="toggle-track">
-          <div class="toggle-thumb" id="toggleIcon">🌙</div>
+    <!-- NAVBAR -->
+    <nav>
+        <div class="nav-inner">
+            <a href="/" class="logo">
+                <div class="logo-hex">FM</div>
+                <div class="logo-txt">
+                    <span class="logo-name">FEEMO</span>
+                    <span class="logo-tag">WHATSAPP BOT</span>
+                </div>
+            </a>
+            <div class="nav-right">
+                <a href="/qr" class="nav-link" target="_blank">QR</a>
+                <a href="/pair" class="nav-link" target="_blank">PAIR</a>
+                <a href="https://github.com/feemo0/FAHEEM-MD" class="nav-link" target="_blank">GITHUB</a>
+                <div class="theme-pill" onclick="toggleTheme()">
+                    <span class="pill-icon" id="themeIcon">🌙</span>
+                    <div class="pill-track">
+                        <div class="pill-thumb"></div>
+                    </div>
+                    <span class="pill-lbl" id="themeLabel">NIGHT</span>
+                </div>
+            </div>
         </div>
-      </label>
-    </div>
-  </nav>
+    </nav>
 
-  <!-- MAIN -->
-  <main>
-    <div class="hero-title">FAHEEM-MD SESSION HUB</div>
-    <div class="hero-sub">Multi-Device WhatsApp Bot · Next Generation</div>
-    <div class="divider"></div>
+    <!-- HERO -->
+    <main class="hero">
+        <div class="hero-badge">
+            <span class="bdot"></span>
+            MULTI DEVICE &nbsp;·&nbsp; BEST BOT
+        </div>
+        <h1 class="hero-title">FAHEEM-MD</h1>
+        <p class="hero-sub">Session Authentication Portal</p>
 
-    <div class="status-bar">
-      <div class="status-dot"></div>
-      <span>System Online &amp; Ready</span>
-    </div>
+        <div class="electric-card">
+            <div class="corner c-tl"></div>
+            <div class="corner c-tr"></div>
+            <div class="corner c-bl"></div>
+            <div class="corner c-br"></div>
 
-    <div class="all-btns">
+            <p class="card-title">⚡ Choose Session Method</p>
 
-      <!-- Session pairing -->
-      <p class="section-label">⚡ Session Setup</p>
-      <div class="btn-row">
-        <a href="/qr" class="e-btn primary" target="_blank">
-          <span class="icon">📷</span>
-          <span>QR Code</span>
-        </a>
-        <a href="/pair" class="e-btn primary" target="_blank">
-          <span class="icon">🔗</span>
-          <span>Pair Code</span>
-        </a>
-      </div>
+            <div class="btn-grid">
 
-      <div class="glow-divider"></div>
+                <a href="/qr" class="ebtn danger qr-btn" target="_blank">
+                    <div class="sw"></div>
+                    <span class="eico">📷</span>
+                    <span class="etxt">QR CODE<small>Scan to connect</small></span>
+                </a>
 
-      <!-- Resources -->
-      <p class="section-label">🚀 Resources</p>
-      <div class="btn-group">
-        <a href="https://github.com/feemo0/FAHEEM-MD" class="e-btn" target="_blank">
-          <span class="icon">🍴</span>
-          <span>Fork Bot on GitHub</span>
-        </a>
-        <a href="https://whatsapp.com/channel/0029VbBDkMV05MUnspQOhf1A" class="e-btn" target="_blank">
-          <span class="icon">💬</span>
-          <span>Support Channel</span>
-        </a>
-        <a href="https://www.youtube.com/@FAHEEM501" class="e-btn" target="_blank">
-          <span class="icon">▶️</span>
-          <span>Subscribe YT Channel</span>
-        </a>
-      </div>
+                <a href="/pair" class="ebtn danger" target="_blank">
+                    <div class="sw"></div>
+                    <span class="eico">🔗</span>
+                    <span class="etxt">PAIRING CODE<small>Enter on phone</small></span>
+                </a>
 
-      <div class="glow-divider"></div>
+                <div class="divider">
+                    <hr><span>MORE LINKS</span>
+                    <hr>
+                </div>
 
-      <!-- Support -->
-      <p class="section-label">🛠 Need Help?</p>
-      <div class="btn-group">
-        <a href="https://wa.me/+923154937411?text=*ASLAM_U_ALIKUM_HAVE_ERROR_FAHEEM-MD 🌸*" class="e-btn danger" target="_blank">
-          <span class="icon">⚠️</span>
-          <span>Report an Error</span>
-        </a>
-      </div>
+                <a href="https://github.com/feemo0/FAHEEM-MD" class="ebtn danger" target="_blank">
+                    <div class="sw"></div>
+                    <span class="eico">⭐</span>
+                    <span class="etxt">FORK BOT<small>GitHub repo</small></span>
+                </a>
 
-    </div>
-  </main>
+                <a href="https://whatsapp.com/channel/0029VbBDkMV05MUnspQOhf1A" class="ebtn danger" target="_blank">
+                    <div class="sw"></div>
+                    <span class="eico">📢</span>
+                    <span class="etxt">SUPPORT<small>WA Channel</small></span>
+                </a>
 
-  <!-- FOOTER -->
-  <footer>
-    © <span>FEEMO</span> · Powered by FAHEEM-BOT ❤️ &nbsp;·&nbsp; <span id="currentYear"></span>
-  </footer>
+                <a href="https://www.youtube.com/@FAHEEM501" class="ebtn danger" target="_blank">
+                    <div class="sw"></div>
+                    <span class="eico">▶️</span>
+                    <span class="etxt">YOUTUBE<small>Subscribe now</small></span>
+                </a>
 
-  <script>
-    // Year
-    document.getElementById('currentYear').textContent = new Date().getFullYear();
+                <a href="https://wa.me/+923154937411?text=*ASLAM_U_ALIKUM_HAVE_ERROR_FAHEEM-MD 🌸*" class="ebtn danger"
+                    target="_blank">
+                    <div class="sw"></div>
+                    <span class="eico">🆘</span>
+                    <span class="etxt">REPORT ERROR<small>Contact owner</small></span>
+                </a>
 
-    // Particles
-    const container = document.getElementById('particles');
-    for (let i = 0; i < 22; i++) {
-      const p = document.createElement('div');
-      p.className = 'particle';
-      const size = Math.random() * 4 + 2;
-      p.style.cssText = `
-        width: ${size}px; height: ${size}px;
-        left: ${Math.random() * 100}%;
-        --dur: ${6 + Math.random() * 10}s;
-        --delay: -${Math.random() * 12}s;
-        background: ${Math.random() > 0.5 ? 'var(--accent)' : 'var(--accent2)'};
-      `;
-      container.appendChild(p);
-    }
+            </div>
 
-    // Theme toggle
-    function toggleTheme(cb) {
-      const icon = document.getElementById('toggleIcon');
-      if (cb.checked) {
-        document.documentElement.setAttribute('data-theme', 'light');
-        icon.textContent = '☀️';
-      } else {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        icon.textContent = '🌙';
-      }
-    }
-  </script>
+            <p class="error-hint">
+                🌐 Having issues? Contact the owner directly<br>
+                via WhatsApp for instant support 🌐
+            </p>
+        </div>
+    </main>
+
+    <footer>
+        © <b>FEEMO</b> &nbsp;·&nbsp; Developed For &#x1F1F5;&#x1F1F0;
+        with ❤️ <b>BY</b> 🌐 &copy; <span id="yr"></span>
+    </footer>
+
+    <script>
+        document.getElementById('yr').textContent = new Date().getFullYear();
+
+        function toggleTheme() {
+            const h = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            const label = document.getElementById('themeLabel');
+            const isDark = h.getAttribute('data-theme') === 'dark';
+            h.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            icon.textContent = isDark ? '☀️' : '🌙';
+            label.textContent = isDark ? 'DAY' : 'NIGHT';
+            try { localStorage.setItem('feemo-theme', isDark ? 'light' : 'dark'); } catch (e) { }
+        }
+        try {
+            const s = localStorage.getItem('feemo-theme');
+            if (s && s !== 'dark') {
+                document.documentElement.setAttribute('data-theme', s);
+                document.getElementById('themeIcon').textContent = '☀️';
+                document.getElementById('themeLabel').textContent = 'DAY';
+            }
+        } catch (e) { }
+
+        /* Floating particles */
+        (function () {
+            const canvas = document.getElementById('bg-canvas');
+            const ctx = canvas.getContext('2d');
+            let W, H, particles = [];
+
+            function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+            window.addEventListener('resize', resize);
+            resize();
+
+            function getColor() {
+                return getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#00ff8c';
+            }
+
+            class P {
+                constructor() { this.reset(true); }
+                reset(init) {
+                    this.x = Math.random() * W;
+                    this.y = init ? Math.random() * H : H + 10;
+                    this.r = Math.random() * 1.6 + .3;
+                    this.sp = Math.random() * .55 + .18;
+                    this.vx = (Math.random() - .5) * .35;
+                    this.mo = Math.random() * .4 + .1;
+                    this.op = 0;
+                    this.col = getColor();
+                }
+                tick() {
+                    this.y -= this.sp; this.x += this.vx;
+                    this.op = this.y > H * .88 ? ((H - this.y) / (H * .12)) * this.mo
+                        : this.y < H * .12 ? (this.y / (H * .12)) * this.mo
+                            : this.mo;
+                    if (this.y < -10) this.reset(false);
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                    ctx.fillStyle = this.col;
+                    ctx.globalAlpha = Math.max(0, this.op);
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < 60; i++) particles.push(new P());
+
+            function loop() {
+                ctx.clearRect(0, 0, W, H);
+                ctx.globalAlpha = 1;
+                particles.forEach(p => { p.tick(); p.draw(); });
+                requestAnimationFrame(loop);
+            }
+            loop();
+
+            new MutationObserver(() => {
+                const c = getColor();
+                particles.forEach(p => p.col = c);
+            }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+        })();
+    </script>
 </body>
+
 </html>
