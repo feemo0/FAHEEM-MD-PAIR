@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FEEMO — FAHEEM-MD Session</title>
-    <link rel="shortcut icon" href="" type="image/x-icon">
+    <title>FAHEEM-MD PAIR CODE</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Space+Mono&display=swap"
         rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
 
     <style>
         :root {
@@ -39,11 +39,12 @@
             --accent2: #0070b8;
             --accent3: #cc1133;
             --accent-glow: rgba(0, 145, 82, 0.22);
-            --card: rgba(255, 255, 255, 0.055);
+            --card: rgba(255, 255, 255, 0.035);
             --footer-bg: rgba(220, 255, 238, 0.95);
             --wave-a: rgba(0, 170, 90, 0.08);
             --wave-b: rgba(0, 160, 220, 0.06);
             --text: white;
+
         }
 
         *,
@@ -211,7 +212,7 @@
             background: var(--navbar-bg);
             border-bottom: 1px solid var(--glass-border);
             box-shadow: 0 2px 32px var(--accent-glow);
-            transition: background .45s, box-shadow .45s;
+            transition: background .45s;
         }
 
         .nav-inner {
@@ -282,7 +283,7 @@
             letter-spacing: 2.5px;
             color: var(--text-muted);
             -webkit-text-fill-color: var(--text-muted);
-            margin-top: 4px;
+            margin-top: 7px;
         }
 
         .nav-right {
@@ -356,7 +357,6 @@
             top: 3px;
             left: 3px;
             transition: transform .3s, background .3s;
-            box-shadow: 0 0 6px var(--accent-glow);
         }
 
         [data-theme="light"] .pill-thumb {
@@ -374,8 +374,6 @@
             color: var(--text-muted);
             letter-spacing: 1px;
         }
-
-
 
         /* ══ HERO ══ */
         .hero {
@@ -402,7 +400,7 @@
             font-size: 10px;
             letter-spacing: 2.5px;
             color: var(--accent);
-            margin-bottom: 30px;
+            margin-bottom: 28px;
             animation: badgePop .8s cubic-bezier(.34, 1.56, .64, 1) both .1s;
         }
 
@@ -442,8 +440,8 @@
         .hero-title {
             font-family: 'Orbitron', monospace;
             font-weight: 900;
-            font-size: clamp(36px, 3vw, 80px);
-            letter-spacing: 6px;
+            font-size: clamp(28px, 7vw, 62px);
+            letter-spacing: 5px;
             line-height: 1;
             margin-bottom: 6px;
             background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 45%, #fff 55%, var(--accent) 100%);
@@ -479,11 +477,11 @@
 
         .hero-sub {
             font-family: 'Space Mono', monospace;
-            font-size: clamp(10px, 2vw, 14px);
-            letter-spacing: 5px;
+            font-size: clamp(9px, 1.8vw, 13px);
+            letter-spacing: 4px;
             color: var(--text-muted);
             text-transform: uppercase;
-            margin-bottom: 52px;
+            margin-bottom: 44px;
             animation: fadeSlide .8s ease both .45s;
         }
 
@@ -496,6 +494,37 @@
             to {
                 opacity: 1;
                 transform: translateY(0)
+            }
+        }
+
+        .electric-card {
+            position: relative;
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            background: #111;
+            color: white;
+            border-radius: 12px;
+        }
+
+        .electric-card::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #00f7ff, #ff00ff, #00f7ff);
+            background-size: 300% 300%;
+            animation: electricMove 4s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes electricMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: 300% 50%;
             }
         }
 
@@ -533,196 +562,239 @@
 
         .card-title {
             font-family: 'Orbitron', monospace;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             letter-spacing: 3px;
             color: var(--accent);
             text-align: center;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .card-desc {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--text-muted);
+            letter-spacing: 1.5px;
+            text-align: center;
             margin-bottom: 28px;
-            text-transform: uppercase;
+            line-height: 1.7;
         }
 
-        /* ══ BUTTONS ══ */
-        .btn-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-
-        .ebtn {
-            position: relative;
+        /* ══ INPUT ROW ══ */
+        .input-row {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 9px;
-            padding: 15px 18px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-family: 'Orbitron', monospace;
-            font-weight: 700;
-            font-size: 10px;
-            letter-spacing: 1.8px;
-            color: var(--text);
-            background: var(--card);
-            border: 1px solid var(--glass-border);
-            transition: transform .25s, box-shadow .25s, color .25s;
-            overflow: hidden;
-            text-transform: uppercase;
-            backdrop-filter: blur(8px);
-            cursor: pointer;
-        }
-
-
-        .electric-card {
-            position: relative;
-            padding: 20px;
-            background: #111;
-            color: white;
-            border-radius: 12px;
-        }
-
-        .electric-card::before {
-            content: "";
-            position: absolute;
-            inset: -2px;
-            border-radius: 12px;
-            background: linear-gradient(90deg, #00f7ff, #ff00ff, #00f7ff);
-            background-size: 300% 300%;
-            animation: electricMove 4s linear infinite;
-            z-index: -1;
-        }
-
-        @keyframes electricMove {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            100% {
-                background-position: 300% 50%;
-            }
-        }
-
-
-        .ebtn:hover::before,
-        .ebtn:hover::after {
-            opacity: 1;
-        }
-
-        .ebtn:active {
-            transform: translateY(-1px);
-        }
-
-        .ebtn .sw {
-            position: absolute;
-            top: -100%;
-            left: 0;
+            gap: 0;
             width: 100%;
-            height: 100%;
-            background: linear-gradient(transparent, rgba(0, 255, 140, .07), transparent);
-            transition: top .5s;
-            pointer-events: none;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            background: var(--input-bg);
+            backdrop-filter: blur(10px);
+            transition: border-color .3s, box-shadow .3s;
+            position: relative;
         }
 
-        .ebtn:hover .sw {
-            top: 100%;
+        .input-row:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(0, 255, 140, .12), 0 0 24px rgba(0, 255, 140, .15);
         }
 
-        .ebtn .eico {
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-
-        .ebtn .etxt {
-            line-height: 1.25;
-        }
-
-        .ebtn .etxt small {
-            display: block;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 10px;
-            letter-spacing: 1px;
-            opacity: .6;
-            margin-top: 1px;
-            font-weight: 400;
-        }
-
-        /* ALL buttons — always electric spinning border like the card shimmer */
+        /* Spinning border on input focus */
         @property --angle {
             syntax: '<angle>';
             inherits: false;
             initial-value: 0deg;
         }
 
-        .ebtn {
-            border-color: transparent !important;
-        }
-
-        .ebtn::before {
-            opacity: 1 !important;
-            background: conic-gradient(from var(--angle), var(--accent), var(--accent2), transparent, transparent, var(--accent));
+        .input-row::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 14px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity .3s;
             animation: spinBorder 3s linear infinite;
         }
 
-        .ebtn::after {
-            opacity: .3 !important;
+        .input-row:focus-within::before {
+            opacity: 1;
         }
 
         @keyframes spinBorder {
             to {
-                --angle: 360deg;
+                --angle: 360deg
             }
         }
 
-
-
-        /* Danger */
-        .ebtn.danger::before {
-            background: conic-gradient(from var(--angle), var(--accent3), #ff6600, transparent, transparent, var(--accent3));
-            animation: spinBorder 3s linear infinite;
-        }
-
-        .ebtn.danger:hover {
-            color: var(--text);
-            box-shadow: 0 8px 30px rgba(255, 45, 85, .3);
-        }
-
-        /* Full width */
-        .ebtn.full {
-            grid-column: 1 / -1;
-        }
-
-        /* Divider */
-        .divider {
-            grid-column: 1/-1;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 4px 0;
-        }
-
-        .divider hr {
+        .input-row input {
             flex: 1;
+            padding: 14px 16px;
+            background: transparent;
             border: none;
-            border-top: 1px solid var(--glass-border);
-        }
-
-        .divider span {
+            outline: none;
+            color: var(--text);
             font-family: 'Space Mono', monospace;
-            font-size: 9px;
-            color: var(--text-muted);
+            font-size: 13px;
             letter-spacing: 2px;
-            white-space: nowrap;
         }
 
-        /* Error hint */
-        .error-hint {
-            text-align: center;
-            margin-top: 18px;
-            font-family: 'Space Mono', monospace;
-            font-size: 10px;
+        .input-row input::placeholder {
             color: var(--text-muted);
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        /* Remove number arrows */
+        .input-row input::-webkit-outer-spin-button,
+        .input-row input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .input-row input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        .submit-btn {
+            padding: 14px 20px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border: none;
+            outline: none;
+            cursor: pointer;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #000;
+            text-transform: uppercase;
+            transition: filter .25s, transform .2s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .submit-btn:hover {
+            filter: brightness(1.15);
+            transform: scale(1.03);
+        }
+
+        .submit-btn:active {
+            transform: scale(.97);
+        }
+
+        /* ══ RESULT AREA ══ */
+        .result-area {
+            margin-top: 20px;
+            min-height: 36px;
+            text-align: center;
+        }
+
+        .result-msg {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
             letter-spacing: 1.5px;
             line-height: 1.8;
+            padding: 12px 16px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .result-msg.info {
+            color: var(--accent2);
+            background: rgba(0, 212, 255, .07);
+            border: 1px solid rgba(0, 212, 255, .2);
+            display: block;
+        }
+
+        .result-msg.error {
+            color: var(--accent3);
+            background: rgba(255, 45, 85, .07);
+            border: 1px solid rgba(255, 45, 85, .2);
+            display: block;
+        }
+
+        .result-msg.success {
+            display: block;
+            color: var(--accent);
+            background: rgba(0, 255, 140, .06);
+            border: 1px solid rgba(0, 255, 140, .2);
+        }
+
+        /* Code display */
+        .code-box {
+            display: none;
+            margin-top: 16px;
+            background: rgba(0, 255, 140, .05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 18px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: border-color .3s;
+        }
+
+        .code-box::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 14px;
+            background: conic-gradient(from var(--angle), var(--accent), var(--accent2), var(--accent3), var(--accent));
+            z-index: -1;
+            opacity: 1;
+            animation: spinBorder 2.5s linear infinite;
+        }
+
+        .code-box:hover {
+            border-color: transparent;
+        }
+
+        .code-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .code-val {
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: clamp(22px, 5vw, 32px);
+            letter-spacing: 8px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 12px rgba(0, 255, 140, .4));
+        }
+
+        .code-hint {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        .code-copied {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 255, 140, .12);
+            font-family: 'Orbitron', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: var(--accent);
+            opacity: 0;
+            transition: opacity .3s;
+            pointer-events: none;
         }
 
         /* ══ FOOTER ══ */
@@ -732,7 +804,7 @@
             background: var(--footer-bg);
             border-top: 1px solid var(--glass-border);
             backdrop-filter: blur(24px);
-            padding: 18px 20px;
+            padding: 16px 20px;
             text-align: center;
             font-family: 'Space Mono', monospace;
             font-size: 11px;
@@ -746,7 +818,7 @@
         }
 
         /* ══ RESPONSIVE ══ */
-        @media(max-width:768px) {
+        @media(max-width:500px) {
             .nav-link {
                 display: none;
             }
@@ -755,55 +827,25 @@
                 padding: 100px 16px 60px;
             }
 
-            /* .session-card {
-                padding: 28px 18px 24px;
-                border-radius: 16px;
-                max-width: 100%;
-            } */
             .electric-card {
-                padding: 28px 18px 24px;
+                padding: 30px 16px 22px;
                 border-radius: 16px;
-                max-width: 100%;
             }
 
-            .btn-grid {
-                grid-template-columns: 1fr;
-                gap: 11px;
+            .input-row {
+                flex-direction: column;
             }
 
-            .ebtn.full {
-                grid-column: auto;
-            }
-
-            .divider {
-                display: none;
+            .submit-btn {
+                border-radius: 0 0 10px 10px;
+                padding: 13px;
             }
 
             .hero-title {
                 letter-spacing: 2px;
             }
 
-            .ebtn {
-                padding: 14px 16px;
-                font-size: 9px;
-            }
-        }
-
-        @media(max-width:400px) {
-            .logo-name {
-                font-size: 15px;
-            }
-
-            .logo-tag {
-                font-size: 8px;
-            }
-
-            .logo-hex {
-                width: 36px;
-                height: 36px;
-            }
-
-            .theme-pill .pill-lbl {
+            .pill-lbl {
                 display: none;
             }
         }
@@ -843,9 +885,8 @@
                 </div>
             </a>
             <div class="nav-right">
+                <a href="/" class="nav-link">HOME</a>
                 <a href="/qr" class="nav-link" target="_blank">QR</a>
-                <a href="/pair" class="nav-link" target="_blank">PAIR</a>
-                <a href="https://github.com/feemo0/FAHEEM-MD" class="nav-link" target="_blank">GITHUB</a>
                 <div class="theme-pill" onclick="toggleTheme()">
                     <span class="pill-icon" id="themeIcon">🌙</span>
                     <div class="pill-track">
@@ -859,12 +900,14 @@
 
     <!-- HERO -->
     <main class="hero">
+
         <div class="hero-badge">
             <span class="bdot"></span>
-            MULTI DEVICE &nbsp;·&nbsp; BEST BOT
+            PAIRING CODE · SECURE SESSION
         </div>
-        <h1 class="hero-title">FAHEEM-MD</h1>
-        <p class="hero-sub">Session Authentication Portal</p>
+
+        <h1 class="hero-title">PAIR CODE</h1>
+        <p class="hero-sub">Enter your number to get session code</p>
 
         <div class="electric-card">
             <div class="corner c-tl"></div>
@@ -872,58 +915,27 @@
             <div class="corner c-bl"></div>
             <div class="corner c-br"></div>
 
-            <p class="card-title">⚡ Choose Session Method</p>
+            <p class="card-title">🔗 WhatsApp Pairing</p>
+            <p class="card-desc">
+                Enter your number with country code<br>
+                e.g. &nbsp;<b style="color:var(--accent)">+923337862496</b>
+            </p>
 
-            <div class="btn-grid">
-
-                <a href="/qr" class="ebtn danger qr-btn" target="_blank">
-                    <div class="sw"></div>
-                    <span class="eico">📷</span>
-                    <span class="etxt">QR CODE<small>Scan to connect</small></span>
-                </a>
-
-                <a href="/pair" class="ebtn danger" target="_blank">
-                    <div class="sw"></div>
-                    <span class="eico">🔗</span>
-                    <span class="etxt">PAIRING CODE<small>Enter on phone</small></span>
-                </a>
-
-                <div class="divider">
-                    <hr><span>MORE LINKS</span>
-                    <hr>
-                </div>
-
-                <a href="https://github.com/feemo0/FAHEEM-MD" class="ebtn danger" target="_blank">
-                    <div class="sw"></div>
-                    <span class="eico">⭐</span>
-                    <span class="etxt">FORK BOT<small>GitHub repo</small></span>
-                </a>
-
-                <a href="https://whatsapp.com/channel/0029VbBDkMV05MUnspQOhf1A" class="ebtn danger" target="_blank">
-                    <div class="sw"></div>
-                    <span class="eico">📢</span>
-                    <span class="etxt">SUPPORT<small>WA Channel</small></span>
-                </a>
-
-                <a href="https://www.youtube.com/@FAHEEM501" class="ebtn danger" target="_blank">
-                    <div class="sw"></div>
-                    <span class="eico">▶️</span>
-                    <span class="etxt">YOUTUBE<small>Subscribe now</small></span>
-                </a>
-
-                <a href="https://wa.me/+923154937411?text=*ASLAM_U_ALIKUM_HAVE_ERROR_FAHEEM-MD 🌸*" class="ebtn danger"
-                    target="_blank">
-                    <div class="sw"></div>
-                    <span class="eico">🆘</span>
-                    <span class="etxt">REPORT ERROR<small>Contact owner</small></span>
-                </a>
-
+            <div class="input-row">
+                <input type="number" id="number" placeholder="+ Country Code + Number" />
+                <button class="submit-btn" id="submit">GET CODE</button>
             </div>
 
-            <p class="error-hint">
-                🌐 Having issues? Contact the owner directly<br>
-                via WhatsApp for instant support 🌐
-            </p>
+            <div class="result-area">
+                <div class="result-msg" id="resultMsg"></div>
+                <div class="code-box" id="codeBox" onclick="Copy()">
+                    <div class="code-label">YOUR PAIRING CODE — TAP TO COPY</div>
+                    <div class="code-val" id="codeVal"></div>
+                    <div class="code-hint">Open WhatsApp → Linked Devices → Link with phone number</div>
+                    <div class="code-copied" id="copiedOverlay">✓ COPIED!</div>
+                </div>
+            </div>
+
         </div>
     </main>
 
@@ -935,6 +947,7 @@
     <script>
         document.getElementById('yr').textContent = new Date().getFullYear();
 
+        /* Theme */
         function toggleTheme() {
             const h = document.documentElement;
             const icon = document.getElementById('themeIcon');
@@ -954,7 +967,68 @@
             }
         } catch (e) { }
 
-        /* Floating particles */
+        /* Copy code — ORIGINAL LOGIC KEPT */
+        async function Copy() {
+            const obj = document.getElementById('codeVal');
+            const overlay = document.getElementById('copiedOverlay');
+            try {
+                await navigator.clipboard.writeText(obj.innerText.replace(/\s/g, ''));
+                overlay.style.opacity = '1';
+                setTimeout(() => { overlay.style.opacity = '0'; }, 900);
+            } catch (e) { }
+        }
+
+        /* Submit — ORIGINAL LOGIC KEPT */
+        const a = document.getElementById('resultMsg');
+        const box = document.getElementById('codeBox');
+        const b = document.getElementById('submit');
+        const c = document.getElementById('number');
+
+        b.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            a.className = 'result-msg';
+            box.style.display = 'none';
+
+            if (!c.value) {
+                a.className = 'result-msg error';
+                a.textContent = '❗ Enter your WhatsApp number with country code.';
+                return;
+            }
+
+            if (c.value.replace(/[^0-9]/g, '').length < 11) {
+                a.className = 'result-msg error';
+                a.textContent = '❌ Invalid number format. Please check and try again.';
+                return;
+            }
+
+            const bc = c.value.replace(/[^0-9]/g, '');
+
+            // Format display — original logic
+            let bb = '', bbc = '';
+            bc.split('').forEach(ch => {
+                bbc += ch;
+                if (bbc.length === 3 || bbc.length === 8) bb += ' ' + ch;
+                else bb += ch;
+            });
+            c.type = 'text';
+            c.value = '+' + bb;
+            c.style.color = 'var(--accent)';
+
+            a.className = 'result-msg info';
+            a.textContent = '⏳ FAHEEM-MD Pairing... Please wait 💙';
+
+            let { data } = await axios(`/code?number=${bc}`);
+            let code = data.code || 'Service Unavailable';
+
+            a.className = 'result-msg success';
+            a.textContent = '✅ Code generated! Tap below to copy.';
+
+            document.getElementById('codeVal').textContent = code;
+            box.style.display = 'block';
+        });
+
+        /* Particles canvas */
         (function () {
             const canvas = document.getElementById('bg-canvas');
             const ctx = canvas.getContext('2d');
